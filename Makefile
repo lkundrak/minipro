@@ -55,6 +55,7 @@ install:
 	cp man/minipro.1 $(MAN_INSTDIR)/
 	if [ -n "$(UDEV_DIR)" ]; then \
 		mkdir -p $(UDEV_RULES_INSTDIR); \
+		cp udev/rules.d/60-minipro.rules $(UDEV_RULES_INSTDIR)/; \
 		cp udev/rules.d/80-minipro.rules $(UDEV_RULES_INSTDIR)/; \
 	fi
 	if [ -n "$(COMPLETIONS_DIR)" ]; then \
@@ -67,7 +68,7 @@ uninstall:
 	rm -f $(BIN_INSTDIR)/$(MINIPRO_QUERY_DB)
 	rm -f $(BIN_INSTDIR)/$(MINIPROHEX)
 	rm -f $(MAN_INSTDIR)/minipro.1
-	if [ -n "$(UDEV_DIR)" ]; then rm -f $(UDEV_RULES_INSTDIR)/80-minipro.rules; fi
+	if [ -n "$(UDEV_DIR)" ]; then rm -f $(UDEV_RULES_INSTDIR)/[68]0-minipro.rules; fi
 	if [ -n "$(COMPLETIONS_DIR)" ]; then rm -f $(COMPLETIONS_INSTDIR)/minipro; fi
 
 dist: distclean
