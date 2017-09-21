@@ -511,10 +511,20 @@ int main(int argc, char **argv) {
 		if (chip_id == device->chip_id) {
 			printf("Chip ID OK: 0x%02x\n", chip_id);
 		} else {
-			if (cmdopts.idcheck_continue)
-				printf("WARNING: Chip ID mismatch: expected 0x%02x, got 0x%02x\n", device->chip_id, chip_id);
-			else
-				ERROR2("Invalid Chip ID: expected 0x%02x, got 0x%02x\n(use '-y' to continue anyway at your own risk)\n", device->chip_id, chip_id);
+			fprintf(stderr, "%s: Chip ID mismatch: expected 0x%02x, got 0x%02x\n", cmdopts.idcheck_continue ? "WARNING" : "ERROR", device->chip_id, chip_id);
+			if (!cmdopts.idcheck_continue) {
+				if (chip_id) {
+					device_t *device;
+
+					for(device = &(devices[0]); device[0].name; device = &(device[1])) {
+						if (device->chip_id == chip_id)
+							printf("Hint: device \"%s\" matches\n", device->name);
+					}
+				}
+
+				fprintf(stderr, "Hint: use '-y' to continue anyway at your own risk\n");
+				exit(-1);
+			}
 		}
 	}
 
